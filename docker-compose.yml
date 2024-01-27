@@ -1,0 +1,29 @@
+version: '3.7'
+
+services:
+  charge_point_node:
+    container_name: charge_point_node
+    restart: always
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    volumes:
+      - .:/usr/src/csms
+    ports:
+      - "${WS_SERVER_PORT}:${WS_SERVER_PORT}"
+    env_file:
+      - .env
+    command: >
+      sh -c "cd /usr/src/csms &&
+             watchmedo auto-restart --pattern '*.py' --recursive --signal SIGTERM python main.py"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+    external: true
+
