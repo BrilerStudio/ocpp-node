@@ -28,7 +28,7 @@ async def on_meter_values(
         message_id=message_id,
         payload=CallMeterValuesPayload(**kwargs),
     )
-    await publish(event.json(), to=event.exchange, priority=event.priority)
+    await publish(event.model_dump_json(), to=event.exchange, priority=event.priority)
 
 
 @router.out(Action.MeterValues)

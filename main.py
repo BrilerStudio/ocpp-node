@@ -67,7 +67,7 @@ async def on_connect(connection, path: str):
 
     logger.info(f'Closed connection (charge_point_id={charge_point_id})')
     event = LostConnectionEvent(charge_point_id=charge_point_id)
-    await publish(event.json(), to=event.exchange, priority=event.priority)
+    await publish(event.model_dump_json(), to=event.exchange, priority=event.priority)
 
 
 async def main():

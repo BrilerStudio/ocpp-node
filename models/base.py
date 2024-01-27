@@ -13,4 +13,4 @@ class BaseEvent(BaseModel):
     priority: int = REGULAR_MESSAGE_PRIORITY
 
     def __str__(self):
-        return self.json()
+        return self.model_dump_json()

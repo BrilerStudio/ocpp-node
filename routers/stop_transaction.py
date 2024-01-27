@@ -30,7 +30,7 @@ async def on_stop_transaction(
         message_id=message_id,
         payload=CallStartStopTransactionPayload(**kwargs),
     )
-    await publish(event.json(), to=event.exchange, priority=event.priority)
+    await publish(event.model_dump_json(), to=event.exchange, priority=event.priority)
 
 
 @router.out(Action.StopTransaction)
