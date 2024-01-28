@@ -1,4 +1,5 @@
 import asyncio
+import http
 from traceback import format_exc
 
 import websockets
@@ -49,6 +50,10 @@ async def watch(connection: OCPPWebSocketServerProtocol):
 
 
 async def on_connect(connection, path: str):
+    if path == "/healthz":
+        await connection.send('ok')
+        return await connection.close()
+
     charge_point_id = path.split('/')[-1].strip('/')
     if not charge_point_id:
         charge_point_id = f'No-id-provided-{id(connection)}'
