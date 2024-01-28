@@ -62,7 +62,9 @@ class Router:
 
         call_result = CallResult(task.message_id, camel_case_payload)
         call_result.action = task.action
-        await connection.send(call_result.to_json())
+        json_response = call_result.to_json()
+        await connection.send(json_response)
+        logger.info(f'Send response (charge_point_id={connection.charge_point_id}, response={json_response})')
 
     def _prepare_route_map(self, func, action, option, skip_schema_validation):
         if action not in self._route_map:

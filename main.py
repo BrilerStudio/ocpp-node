@@ -30,6 +30,7 @@ async def watch(connection: OCPPWebSocketServerProtocol):
     while True:
         try:
             raw_msg = await connection.recv()
+            logger.info('Got message from websocket (message=%r)' % raw_msg)
         except Exception:
             break
 

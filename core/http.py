@@ -27,6 +27,5 @@ class ApiClient:
 
     async def post(self, endpoint: str, data=None):
         uri = self.get_uri(endpoint)
-        print(uri)
         async with self._client() as client:
             return await client.post(uri, data=data, headers=self.headers)
