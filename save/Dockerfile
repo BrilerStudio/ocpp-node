@@ -2,13 +2,13 @@ FROM python:3.11.3-slim-bullseye
 
 RUN apt-get update && apt-get install -y build-essential curl git
 
-RUN mkdir -p /usr/src/csms
+RUN mkdir -p /app
 
-WORKDIR /usr/src/csms
+WORKDIR /app
 
-COPY .. /usr/src/csms
+COPY .. /app
 
-ENV PYTHONPATH=/usr/src/csms
+ENV PYTHONPATH=/app
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 ARG GITHUB_TOKEN

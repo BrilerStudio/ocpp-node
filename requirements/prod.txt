@@ -1,2 +1,0 @@
-# install in docker
--r common.txt

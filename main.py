@@ -53,7 +53,7 @@ async def on_connect(connection, path: str):
     if not charge_point_id:
         charge_point_id = f'No-id-provided-{id(connection)}'
     connection.charge_point_id = charge_point_id
-    logger.info(f'New charge point connected (charge_point_id={charge_point_id})')
+    logger.info(f'New charge point connected (charge_point_id={charge_point_id}), headers={connection.request_headers}')
 
     # response = await api_client.post(f'/charge_points/{charge_point_id}')
     # response_status = HTTPStatus(response.status_code)

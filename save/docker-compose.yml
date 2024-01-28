@@ -44,7 +44,7 @@ services:
       context: ..
       dockerfile: Dockerfile
     volumes:
-      - .:/usr/src/csms
+      - .:/app
     ports:
       - "8001:${HTTP_SERVER_PORT}"
     env_file:
@@ -53,7 +53,7 @@ services:
       - app-network
     restart: always
     command: >
-      sh -c "cd /usr/src/csms && alembic upgrade head &&
+      sh -c "cd /app && alembic upgrade head &&
              uvicorn manager.main:app --host 0.0.0.0 --port 8001 --reload"
     depends_on:
       rabbitmq:
@@ -70,13 +70,13 @@ services:
       context: ..
       dockerfile: Dockerfile
     volumes:
-      - .:/usr/src/csms
+      - .:/app
     ports:
       - "${WS_SERVER_PORT}:${WS_SERVER_PORT}"
     env_file:
       - .env
     command: >
-      sh -c "cd /usr/src/csms &&
+      sh -c "cd /app &&
              watchmedo auto-restart --pattern '*.py' --recursive --signal SIGTERM python charge_point_node/main.py"
     depends_on:
       rabbitmq:

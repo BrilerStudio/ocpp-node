@@ -1,29 +1,19 @@
 version: '3.7'
 
 services:
-  charge_point_node:
-    container_name: charge_point_node
+  ocpp-node:
+    container_name: ocpp-node
     restart: always
-    build:
-      context: ..
-      dockerfile: Dockerfile
+    image: briler/ocpp-node:latest
     volumes:
-      - .:/usr/src/csms
+      - ./logs:/app/logs
     ports:
       - "${WS_SERVER_PORT}:${WS_SERVER_PORT}"
     env_file:
       - .env
-    command: >
-      sh -c "cd /usr/src/csms &&
-             watchmedo auto-restart --pattern '*.py' --recursive --signal SIGTERM python main.py"
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-    networks:
-      - app-network
 
-networks:
-  app-network:
-    driver: bridge
-    external: true
-
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 30 ocpp-node
