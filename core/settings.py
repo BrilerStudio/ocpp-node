@@ -34,6 +34,7 @@ WS_SERVER_PORT = int(os.environ.get('WS_SERVER_PORT', 8001))
 
 HTTP_SERVER_HOST = os.environ.get('HTTP_SERVER_HOST', 'http://localhost')
 HTTP_SERVER_PORT = int(os.environ.get('HTTP_SERVER_PORT', 8000))
+HTTP_SERVER_TOKEN = os.environ.get('HTTP_SERVER_TOKEN', '')
 
 ALLOWED_SERVER_SENT_EVENTS = [
     ConnectionStatus.LOST_CONNECTION,

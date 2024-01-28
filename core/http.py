@@ -4,10 +4,13 @@ from httpx import AsyncClient
 
 
 class ApiClient:
-    def __init__(self, host: str, port: int, client: Type[AsyncClient] = AsyncClient):
+    def __init__(self, host: str, port: int, token: str, client: Type[AsyncClient] = AsyncClient):
         self._host = host
         self._port = port
         self._client = client
+        self.headers = {
+            'Authorization': f'Basic {token}',
+        }
 
     @property
     def host(self) -> str:
@@ -20,9 +23,10 @@ class ApiClient:
     def get_uri(self, endpoint: str) -> str:
         host = self.host.rstrip('/')
         endpoint = endpoint.lstrip('/')
-        return f'{host}:{self.port}/api/{endpoint}'
+        return f'{host}:{self.port}/api/v1/{endpoint}'
 
     async def post(self, endpoint: str, data=None):
         uri = self.get_uri(endpoint)
+        print(uri)
         async with self._client() as client:
-            return await client.post(uri, data=data)
+            return await client.post(uri, data=data, headers=self.headers)

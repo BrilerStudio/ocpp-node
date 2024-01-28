@@ -8,10 +8,10 @@ from websockets.exceptions import InvalidHandshake
 from websockets.legacy.server import WebSocketServerProtocol
 
 from core.http import ApiClient
-from core.settings import HTTP_SERVER_HOST, HTTP_SERVER_PORT
+from core.settings import HTTP_SERVER_HOST, HTTP_SERVER_PORT, HTTP_SERVER_TOKEN
 from utils.logging import logger
 
-api_client = ApiClient(host=HTTP_SERVER_HOST, port=HTTP_SERVER_PORT)
+api_client = ApiClient(host=HTTP_SERVER_HOST, port=HTTP_SERVER_PORT, token=HTTP_SERVER_TOKEN)
 
 
 class OCPPWebSocketServerProtocol(WebSocketServerProtocol):
@@ -70,7 +70,7 @@ class OCPPWebSocketServerProtocol(WebSocketServerProtocol):
         """
         charge_point_id = await self.extract_charge_point_id(path)
 
-        response = await api_client.post(f'/charge_points/{charge_point_id}')
+        response = await api_client.post(f'manager/ChargePoint/{charge_point_id}/verify_password')
         response_status = HTTPStatus(response.status_code)
 
         if not response_status is HTTPStatus.OK:

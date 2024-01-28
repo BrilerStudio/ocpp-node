@@ -10,12 +10,13 @@ from ocpp.exceptions import (
     ProtocolError,
 )
 from ocpp.messages import unpack
+from websockets import Headers
 
 from core.queue.consumer import start_consume
 from core.queue.publisher import publish
 from core.settings import OCPP_VERSION, TASKS_EXCHANGE_NAME, WS_SERVER_PORT
 from models.on_connection import LostConnectionEvent
-from protocols import OCPPWebSocketServerProtocol
+from protocols import OCPPWebSocketServerProtocol, api_client
 from router import Router
 from routers import *  # noqa
 from tasks import process_task
@@ -60,13 +61,12 @@ async def on_connect(connection, path: str):
     connection.charge_point_id = charge_point_id
     logger.info(f'New charge point connected (charge_point_id={charge_point_id}), headers={connection.request_headers}')
 
-    # response = await api_client.post(f'/charge_points/{charge_point_id}')
-    # response_status = HTTPStatus(response.status_code)
-    #
-    # if not response_status is HTTPStatus.OK:
-    #     connection.write_http_response(response_status, Headers())
-    #     logger.info(f'Could not validate charge point (charge_point_id={charge_point_id})')
-    #     raise InvalidHandshake
+    response = await api_client.post(f'manager/ChargePoint/{charge_point_id}/verify_password')
+    response_status = http.HTTPStatus(response.status_code)
+    if not response_status is http.HTTPStatus.OK:
+        connection.write_http_response(response_status, Headers())
+        logger.info(f'Could not validate charge point (charge_point_id={charge_point_id})')
+        return await connection.close()
 
     await watch(connection)
 
