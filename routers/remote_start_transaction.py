@@ -14,8 +14,6 @@ async def on_remote_start_transaction(
         charge_point_id: str,
         **kwargs,
 ):
-    exit()
-
     logger.info(
         f'Got remote start transaction response '
         f'(charge_point_id={charge_point_id}, '
