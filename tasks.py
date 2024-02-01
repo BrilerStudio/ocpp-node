@@ -12,6 +12,7 @@ from tasks_models.authorize import AuthorizeTask
 from tasks_models.boot_notification import BootNotificationTask
 from tasks_models.heartbeat import HeartbeatTask
 from tasks_models.meter_values import MeterValuesTask
+from tasks_models.remote_start_transaction import RemoteStartTransactionTask
 from tasks_models.security_event_notification import SecurityEventNotificationTask
 from tasks_models.start_transaction import StartTransactionTask
 from tasks_models.status_notification import StatusNotificationTask
@@ -33,6 +34,7 @@ def prepare_task(func) -> Callable:
             Action.StartTransaction: StartTransactionTask,
             Action.StopTransaction: StopTransactionTask,
             Action.MeterValues: MeterValuesTask,
+            Action.RemoteStartTransaction: RemoteStartTransactionTask,
         }[data['action']](**data)
         return await func(task, *args, **kwargs)
 

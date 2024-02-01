@@ -4,6 +4,7 @@ from dataclasses import asdict
 from ocpp.charge_point import camel_to_snake_case, remove_nones, snake_to_camel_case
 from ocpp.exceptions import NotSupportedError
 from ocpp.messages import Call, CallResult, validate_payload
+from ocpp.v16.enums import Action
 
 from core import settings
 from protocols import OCPPWebSocketServerProtocol
@@ -60,9 +61,13 @@ class Router:
         response_payload = remove_nones(temp_response_payload)
         camel_case_payload = snake_to_camel_case(response_payload)
 
-        call_result = CallResult(task.message_id, camel_case_payload)
-        call_result.action = task.action
-        json_response = call_result.to_json()
+        if task.action in [Action.RemoteStartTransaction, Action.RemoteStopTransaction]:
+            call_result = Call(task.message_id, task.action, camel_case_payload)
+            json_response = call_result.to_json()
+        else:
+            call_result = CallResult(task.message_id, camel_case_payload)
+            call_result.action = task.action
+            json_response = call_result.to_json()
         await connection.send(json_response)
         logger.info(f'Send response (charge_point_id={connection.charge_point_id}, response={json_response})')
 
