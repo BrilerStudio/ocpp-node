@@ -81,7 +81,7 @@ async def main():
         on_connect,
         '0.0.0.0',
         WS_SERVER_PORT,
-        subprotocols=[f'ocpp{OCPP_VERSION}'],
+        subprotocols=[f'ocpp{OCPP_VERSION}', f'socpp{OCPP_VERSION}'],
     )
     # Save a reference to the result of this function, to avoid a task disappearing mid-execution.
     # The event loop only keeps weak references to tasks_models.
